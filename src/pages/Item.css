@@ -1,0 +1,8 @@
+.Item form {
+  padding-bottom: 15px;
+}
+
+.Item form textarea {
+  height: 300px;
+  font-size: 24px;
+}
