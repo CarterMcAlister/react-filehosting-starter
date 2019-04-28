@@ -1,20 +1,26 @@
-import React from "react";
-import { Button, Glyphicon } from "react-bootstrap";
-import "./LoaderButton.css";
+import React from 'react'
+import { Refresh } from 'grommet-icons'
+import { Button } from 'grommet'
+import styled from 'styled-components'
 
-export default ({
-  isLoading,
-  text,
-  loadingText,
-  className = "",
-  disabled = false,
-  ...props
-}) =>
+const LoaderButton = ({ isLoading, text, loadingText, className = '', disabled = false, ...props}) =>
   <Button
-    className={`LoaderButton ${className}`}
+    label={isLoading ? loadingText : text}
+    icon={isLoading && <SpinningRefreshIcon />}
+    className={className}
+    fill={true}
     disabled={disabled || isLoading}
     {...props}
-  >
-    {isLoading && <Glyphicon glyph="refresh" className="spinning" />}
-    {!isLoading ? text : loadingText}
-  </Button>;
+  />
+
+const SpinningRefreshIcon = styled(Refresh)`
+  animation: spin 1s infinite linear;
+
+  @keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+  }
+
+`
+
+export default LoaderButton

@@ -1,96 +1,85 @@
-import React, { Component } from "react";
-import { API } from "aws-amplify";
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import LoaderButton from "../components/LoaderButton";
-import { s3Upload } from "../libs/awsLib";
-import config from "../config";
-import "./Upload.css";
+import React, { useState } from 'react'
+import { API } from 'aws-amplify'
+import LoaderButton from '../components/LoaderButton'
+import { s3Upload } from '../libs/awsLib'
+import config from '../config'
+import FileSelector from '../components/FileSelector'
+import SelectedFiles from '../components/SelectedFiles'
 
-export default class Upload extends Component {
-  constructor(props) {
-    super(props);
+import { Form, FormField, TextInput, TextArea } from 'grommet'
 
-    this.file = null;
+function Upload(props) {
 
-    this.state = {
-      isLoading: null,
-      content: ""
-    };
-  }
+  const [isLoading, setIsLoading] = useState(null)
+  const [name, setName] = useState('')
+  const [category, setCategory] = useState('')
+  const [description, setDescription] = useState('')
+  const [files, setFiles] = useState([])
 
-  upload(item) {
-    return API.post("upload", "/upload", {
+  const upload = item => {
+    console.log(item)
+    return API.post('upload', '/upload', {
       body: item
-    });
+    })
   }
 
-  validateForm() {
-    return this.state.content.length > 0;
-  }
-
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleFileChange = event => {
-    this.file = event.target.files[0];
-  }
-
-  handleSubmit = async event => {
-    event.preventDefault();
-
-    if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(`Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE/1000000} MB.`);
-      return;
-    }
-
-    this.setState({ isLoading: true });
+  const handleSubmit = async event => {
+    setIsLoading(true)
 
     try {
-      const attachment = this.file
-        ? await s3Upload(this.file)
-        : null;
+      // Upload attached files
+      const fileReference = await Promise.all(
+        files.map(async file => await s3Upload(file))
+      )
 
-      await this.upload({
-        attachment,
-        content: this.state.content
-      });
-      this.props.history.push("/");
+      // Add db entry for item
+      await upload({
+        fileReference,
+        name,
+        category,
+        description
+      })
+      props.history.push('/')
     } catch (e) {
-      alert(e);
-      this.setState({ isLoading: false });
+      alert(e)
+      setIsLoading(false)
     }
   }
 
-  render() {
-    return (
-      <div className="Upload">
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="content">
-            <FormControl
-              onChange={this.handleChange}
-              value={this.state.content}
-              componentClass="textarea"
-            />
-          </FormGroup>
-          <FormGroup controlId="file">
-            <ControlLabel>Attachment</ControlLabel>
-            <FormControl onChange={this.handleFileChange} type="file" />
-          </FormGroup>
-          <LoaderButton
-            block
-            bsStyle="primary"
-            bsSize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-            isLoading={this.state.isLoading}
-            text="Create"
-            loadingText="Creating…"
+  return (
+    <div className="Upload">
+      <Form onSubmit={handleSubmit}>
+        <FormField label="File Name" name="Name">
+          <TextInput
+            onChange={event => setName(event.target.value)}
+            value={name}
           />
-        </form>
-      </div>
-    );
-  }
+        </FormField>
+        <FormField label="File Category" name="Category">
+          <TextInput
+            onChange={event => setCategory(event.target.value)}
+            value={category}
+          />
+        </FormField>
+        <FormField label="File Description" name="Description">
+          <TextArea
+            onChange={event => setDescription(event.target.value)}
+            value={description}
+          />
+        </FormField>
+        <FormField label="File(s)" name="File">
+          <SelectedFiles files={files} />
+          <FileSelector handleSelection={selectedFiles => setFiles(selectedFiles)} />
+        </FormField>
+        <LoaderButton
+          type="submit"
+          isLoading={isLoading}
+          text="Upload"
+          loadingText="Uploading..."
+        />
+      </Form>
+    </div>
+  )
 }
+
+export default Upload

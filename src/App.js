@@ -1,83 +1,80 @@
-import React, { Component, Fragment } from "react";
-import { Auth } from "aws-amplify";
-import { Link, withRouter } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import Routes from "./Routes";
-import "./App.css";
+import React, { Component, Fragment, useState, useEffect } from "react"
+import { Auth } from "aws-amplify"
+import { Link, withRouter } from "react-router-dom"
+import { Nav, Navbar, NavItem } from "react-bootstrap"
+import { LinkContainer } from "react-router-bootstrap"
+import Routes from "./Routes"
+import "./App.css"
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+import { Grommet } from 'grommet'
 
-    this.state = {
-      isAuthenticated: false,
-      isAuthenticating: true
-    };
-  }
 
-  async componentDidMount() {
-    try {
-      await Auth.currentSession();
-      this.userHasAuthenticated(true);
-    }
-    catch(e) {
-      if (e !== 'No current user') {
-        alert(e);
+function App(props) {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
+
+  useEffect(() => {
+    async function getAuthSession() {
+      try {
+        await Auth.currentSession()
+        setIsAuthenticated(true)
       }
+      catch(e) {
+        if (e !== 'No current user') {
+          alert(e)
+        }
+      }
+  
+      setIsAuthenticating(false)
     }
 
-    this.setState({ isAuthenticating: false });
+    getAuthSession()
+  }, [])
+
+  const childProps = {
+    isAuthenticated: isAuthenticated,
+    userHasAuthenticated: setIsAuthenticated
   }
 
-  userHasAuthenticated = authenticated => {
-    this.setState({ isAuthenticated: authenticated });
-  }
+  const handleLogout = async event => {
+    await Auth.signOut()
 
-  handleLogout = async event => {
-    await Auth.signOut();
+    setIsAuthenticated(false)
 
-    this.userHasAuthenticated(false);
-
-    this.props.history.push("/login");
-  }
-
-  render() {
-    const childProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated
-    };
-
+    props.history.push("/login")
+  }    
     return (
-      !this.state.isAuthenticating &&
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">React Filehosting Starter</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-              {this.state.isAuthenticated
-                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                : <Fragment>
-                    <LinkContainer to="/signup">
-                      <NavItem>Signup</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                      <NavItem>Login</NavItem>
-                    </LinkContainer>
-                  </Fragment>
-              }
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Routes childProps={childProps} />
-      </div>
-    );
+      !isAuthenticating &&
+        <Grommet plain>
+        <div className="App container">
+          <Navbar fluid collapseOnSelect>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <Link to="/">React Filehosting Starter</Link>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav pullRight>
+                {isAuthenticated
+                  ? <NavItem onClick={handleLogout}>Logout</NavItem>
+                  : <Fragment>
+                      <LinkContainer to="/signup">
+                        <NavItem>Signup</NavItem>
+                      </LinkContainer>
+                      <LinkContainer to="/login">
+                        <NavItem>Login</NavItem>
+                      </LinkContainer>
+                    </Fragment>
+                }
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <Routes childProps={childProps} />
+        </div>
+      </Grommet>
+    )
   }
-}
 
-export default withRouter(App);
+export default withRouter(App)

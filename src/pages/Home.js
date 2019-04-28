@@ -22,6 +22,7 @@ export default class Home extends Component {
 
     try {
       const list = await this.list();
+      console.log(list)
       this.setState({ list });
     } catch (e) {
       alert(e);
@@ -42,7 +43,7 @@ export default class Home extends Component {
               key={item.uploadId}
               to={`/uploads/${item.uploadId}`}
             >
-              <ListGroupItem header={item.content.trim().split("\n")[0]}>
+              <ListGroupItem >
                 {"Created: " + new Date(item.createdAt).toLocaleString()}
               </ListGroupItem>
             </LinkContainer>
