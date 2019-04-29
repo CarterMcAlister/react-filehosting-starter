@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { API } from "aws-amplify";
-import { Link, NavLink } from "react-router-dom";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-import "./Home.css";
+import React, { useState, useEffect } from "react"
+import { API } from "aws-amplify"
+import { Link, NavLink } from "react-router-dom"
+import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap"
 
-function Home({ isAuthenticated }) {
+function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
   const [list, setList] = useState([])
 
@@ -12,8 +11,6 @@ function Home({ isAuthenticated }) {
     async function getList() {
       try {
         const list = await API.get("list", "/list")
-        // list.shift()
-        console.log(list)
         setList(list)
   
       } catch (e) {
@@ -85,11 +82,11 @@ function Home({ isAuthenticated }) {
   }
 
   return (
-    <div className="Home">
+    <div className="Profile">
       {isAuthenticated ? renderlist() : renderLander()}
     </div>
   )
 
 }
 
-export default Home
+export default Profile
