@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { API } from "aws-amplify"
 import { Link, NavLink } from "react-router-dom"
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap"
+import styled from 'styled-components'
 
 function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -55,10 +56,10 @@ function Profile({ isAuthenticated }) {
             key={item.uploadId}
             to={`/uploads/${item.uploadId}`}
           >
-            <ListGroupItem>
+            <UploadedListItem>
               <span>{item.name}</span>
-              <span>{"Created: " + new Date(item.createdAt).toLocaleString()}</span>
-            </ListGroupItem>
+              <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+            </UploadedListItem>
           </NavLink>
     )
   }
@@ -88,5 +89,10 @@ function Profile({ isAuthenticated }) {
   )
 
 }
+
+const UploadedListItem = styled(ListGroupItem)`
+  display: flex;
+  justify-content: space-between;
+`
 
 export default Profile
