@@ -6,7 +6,9 @@ import config from '../config'
 import FileSelector from '../components/FileSelector'
 import SelectedFiles from '../components/SelectedFiles'
 
-import { Form, FormField, TextInput, TextArea } from 'grommet'
+// import { Form, FormGroup, FormControl, TextArea } from 'grommet'
+import { Form, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+
 
 function Upload(props) {
 
@@ -49,28 +51,32 @@ function Upload(props) {
   return (
     <div className="Upload">
       <Form onSubmit={handleSubmit}>
-        <FormField label="File Name" name="Name">
-          <TextInput
+        <FormGroup name="Name">
+          <ControlLabel>File Name</ControlLabel>
+          <FormControl
             onChange={event => setName(event.target.value)}
             value={name}
           />
-        </FormField>
-        <FormField label="File Category" name="Category">
-          <TextInput
+        </FormGroup>
+        <FormGroup name="Category">
+          <ControlLabel>File Category</ControlLabel>
+          <FormControl
             onChange={event => setCategory(event.target.value)}
             value={category}
           />
-        </FormField>
-        <FormField label="File Description" name="Description">
-          <TextArea
+        </FormGroup>
+        <FormGroup name="Description">
+          <ControlLabel>File Description</ControlLabel>
+          <FormControl
             onChange={event => setDescription(event.target.value)}
             value={description}
           />
-        </FormField>
-        <FormField label="File(s)" name="File">
+        </FormGroup>
+        <FormGroup name="File">
+          <ControlLabel>File(s)</ControlLabel>
           <SelectedFiles files={files} />
           <FileSelector handleSelection={selectedFiles => setFiles(selectedFiles)} />
-        </FormField>
+        </FormGroup>
         <LoaderButton
           type="submit"
           isLoading={isLoading}

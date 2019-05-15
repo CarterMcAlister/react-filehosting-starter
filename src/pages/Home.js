@@ -34,19 +34,7 @@ function Home({ isAuthenticated }) {
   const renderlist = () => {
     return (
       <div className="list">
-        <PageHeader>Your Uploads</PageHeader>
-        <ListGroup>
-          <NavLink
-              key="new"
-              to="uploads/new"
-            >
-              <ListGroupItem>
-                <h4>
-                  <b>{"\uFF0B"}</b> Upload a file
-                </h4>
-              </ListGroupItem>
-            </NavLink>
-        </ListGroup>
+        <PageHeader>Recent Uploads</PageHeader>
         {!isLoading && renderFileList(list)}
       </div>
     )
