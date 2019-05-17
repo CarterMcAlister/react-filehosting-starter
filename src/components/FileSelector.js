@@ -4,21 +4,16 @@ import styled from 'styled-components'
 import { base } from 'grommet/themes'
 
 function FileSelector({ handleSelection }) {
-
   const onDrop = useCallback(acceptedFiles => {
     handleSelection(acceptedFiles)
   }, [])
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
     <DropZone {...getRootProps()}>
       <input {...getInputProps()} />
-      {
-          isDragActive ?
-          <span>Drop the files here</span> :
-          <span>Drag and drop, or click to select files</span>
-      }
+      {isDragActive ? <span>Drop the files here</span> : <span>Drag and drop, or click to select files</span>}
     </DropZone>
   )
 }

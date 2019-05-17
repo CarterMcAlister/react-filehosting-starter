@@ -2,16 +2,11 @@ import React, { useState } from 'react'
 import { API } from 'aws-amplify'
 import LoaderButton from '../components/LoaderButton'
 import { s3Upload } from '../libs/awsLib'
-import config from '../config'
 import FileSelector from '../components/FileSelector'
 import SelectedFiles from '../components/SelectedFiles'
-
-// import { Form, FormGroup, FormControl, TextArea } from 'grommet'
-import { Form, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-
+import { Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 
 function Upload(props) {
-
   const [isLoading, setIsLoading] = useState(null)
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
@@ -30,9 +25,7 @@ function Upload(props) {
 
     try {
       // Upload attached files
-      const fileReference = await Promise.all(
-        files.map(async file => await s3Upload(file))
-      )
+      const fileReference = await Promise.all(files.map(async file => await s3Upload(file)))
 
       // Add db entry for item
       await upload({
@@ -53,36 +46,22 @@ function Upload(props) {
       <Form onSubmit={handleSubmit}>
         <FormGroup name="Name">
           <ControlLabel>File Name</ControlLabel>
-          <FormControl
-            onChange={event => setName(event.target.value)}
-            value={name}
-          />
+          <FormControl onChange={event => setName(event.target.value)} value={name} />
         </FormGroup>
         <FormGroup name="Category">
           <ControlLabel>File Category</ControlLabel>
-          <FormControl
-            onChange={event => setCategory(event.target.value)}
-            value={category}
-          />
+          <FormControl onChange={event => setCategory(event.target.value)} value={category} />
         </FormGroup>
         <FormGroup name="Description">
           <ControlLabel>File Description</ControlLabel>
-          <FormControl
-            onChange={event => setDescription(event.target.value)}
-            value={description}
-          />
+          <FormControl onChange={event => setDescription(event.target.value)} value={description} />
         </FormGroup>
         <FormGroup name="File">
           <ControlLabel>File(s)</ControlLabel>
           <SelectedFiles files={files} />
           <FileSelector handleSelection={selectedFiles => setFiles(selectedFiles)} />
         </FormGroup>
-        <LoaderButton
-          type="submit"
-          isLoading={isLoading}
-          text="Upload"
-          loadingText="Uploading..."
-        />
+        <LoaderButton type="submit" isLoading={isLoading} text="Upload" loadingText="Uploading..." />
       </Form>
     </div>
   )
