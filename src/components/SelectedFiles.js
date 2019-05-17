@@ -3,7 +3,7 @@ import { Table } from 'react-bootstrap'
 
 function SelectedFiles({ files }) {
   return (
-    <Table>
+    <Table responsive>
       <tbody>
         {files.map(file => (
           <tr key={file.name + file.lastModified}>

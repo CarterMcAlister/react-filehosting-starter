@@ -4,7 +4,7 @@ import LoaderButton from '../components/LoaderButton'
 import { s3Upload } from '../libs/awsLib'
 import FileSelector from '../components/FileSelector'
 import SelectedFiles from '../components/SelectedFiles'
-import { Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
 function Upload(props) {
   const [isLoading, setIsLoading] = useState(null)
@@ -12,6 +12,7 @@ function Upload(props) {
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [files, setFiles] = useState([])
+  const [validated, setValidated] = useState(false)
 
   const upload = item => {
     console.log(item)
@@ -21,6 +22,13 @@ function Upload(props) {
   }
 
   const handleSubmit = async event => {
+    const form = event.currentTarget
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    setValidated(true)
     setIsLoading(true)
 
     try {
@@ -43,24 +51,28 @@ function Upload(props) {
 
   return (
     <div className="Upload">
-      <Form onSubmit={handleSubmit}>
-        <FormGroup name="Name">
-          <ControlLabel>File Name</ControlLabel>
-          <FormControl onChange={event => setName(event.target.value)} value={name} />
-        </FormGroup>
-        <FormGroup name="Category">
-          <ControlLabel>File Category</ControlLabel>
-          <FormControl onChange={event => setCategory(event.target.value)} value={category} />
-        </FormGroup>
-        <FormGroup name="Description">
-          <ControlLabel>File Description</ControlLabel>
-          <FormControl onChange={event => setDescription(event.target.value)} value={description} />
-        </FormGroup>
-        <FormGroup name="File">
-          <ControlLabel>File(s)</ControlLabel>
+      <Form onSubmit={handleSubmit} validated={validated} noValidate>
+        <Form.Group controlId="Name">
+          <Form.Label>File Name</Form.Label>
+          <Form.Control onChange={event => setName(event.target.value)} value={name} type="text" required />
+          <Form.Check type="invalid">Please provide a valid name.</Form.Check>
+        </Form.Group>
+        <Form.Group controlId="Category">
+          <Form.Label>File Category</Form.Label>
+          <Form.Control onChange={event => setCategory(event.target.value)} value={category} required />
+          <Form.Check type="invalid">Please provide a valid category.</Form.Check>
+        </Form.Group>
+        <Form.Group controlId="Description">
+          <Form.Label>File Description</Form.Label>
+          <Form.Control onChange={event => setDescription(event.target.value)} value={description} required />
+          <Form.Check type="invalid">Please provide a valid description.</Form.Check>
+        </Form.Group>
+        <Form.Group controlId="File">
+          <Form.Label>File(s)</Form.Label>
           <SelectedFiles files={files} />
           <FileSelector handleSelection={selectedFiles => setFiles(selectedFiles)} />
-        </FormGroup>
+          <Form.Check type="invalid">Please choose at least one file.</Form.Check>
+        </Form.Group>
         <LoaderButton type="submit" isLoading={isLoading} text="Upload" loadingText="Uploading..." />
       </Form>
     </div>

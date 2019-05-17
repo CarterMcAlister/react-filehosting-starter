@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import styled from 'styled-components'
 
 function Profile({ isAuthenticated }) {
@@ -30,7 +30,7 @@ function Profile({ isAuthenticated }) {
   const renderlist = () => {
     return (
       <div className="list">
-        <PageHeader>Your Uploads</PageHeader>
+        <h1>Your Uploads</h1>
         <ListGroup>
           <NavLink key="new" to="uploads/new">
             <ListGroupItem>

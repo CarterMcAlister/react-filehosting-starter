@@ -43,12 +43,10 @@ function App(props) {
     !isAuthenticating && (
       <div className="App container">
         <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">React Filehosting Starter</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/">React Filehosting Starter</Link>
+          </Navbar.Brand>
+          <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav pullRight>
               {isAuthenticated ? (

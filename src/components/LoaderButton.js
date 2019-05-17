@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Glyphicon } from 'react-bootstrap'
-
+import { Button } from 'react-bootstrap'
+// Todo: add FA glyphicons for spinner - styled.div
 const LoaderButton = ({ isLoading, text, loadingText, className = '', disabled = false, ...props }) => (
   <Button className={`LoaderButton ${className}`} disabled={disabled || isLoading} {...props}>
     {isLoading && <SpinningGlyphicon glyph="refresh" />}
@@ -9,7 +9,7 @@ const LoaderButton = ({ isLoading, text, loadingText, className = '', disabled =
   </Button>
 )
 
-const SpinningGlyphicon = styled(Glyphicon)`
+const SpinningGlyphicon = styled.div`
   margin-right: 7px;
   top: 2px;
   animation: spin 1s infinite linear;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Navbar, ListGroup, ListGroupItem } from 'react-bootstrap'
 import './Home.css'
 
 function Home({ isAuthenticated }) {
@@ -32,7 +32,7 @@ function Home({ isAuthenticated }) {
   const renderlist = () => {
     return (
       <div className="list">
-        <PageHeader>Recent Uploads</PageHeader>
+        <h1>Recent Uploads</h1>
         {!isLoading && renderFileList(list)}
       </div>
     )
