@@ -4,8 +4,6 @@
   "private": true,
   "dependencies": {
     "aws-amplify": "^1.1.6",
-    "grommet": "^2.6.6",
-    "grommet-icons": "^4.2.0",
     "react": "^16.8.6",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.8.6",

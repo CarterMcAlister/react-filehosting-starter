@@ -1,21 +1,19 @@
 import React from 'react'
-import { Table, TableBody, TableCell, TableFooter, TableHeader, TableRow, Text, Box } from 'grommet'
+import { Table } from 'react-bootstrap'
 
 function SelectedFiles({ files }) {
   return (
     <Table>
-      <TableBody>
+      <tbody>
         {files.map(file => (
-          <TableRow key={file.name + file.lastModified}>
-            <TableCell scope="row">
+          <tr key={file.name + file.lastModified}>
+            <td>
               <strong>{file.name}</strong>
-            </TableCell>
-            <TableCell scope="row" right={0} style={{ alignItems: 'flex-end' }}>
-              {file.size / 1000}MB
-            </TableCell>
-          </TableRow>
+            </td>
+            <td style={{ alignItems: 'flex-end' }}>{file.size / 1000}MB</td>
+          </tr>
         ))}
-      </TableBody>
+      </tbody>
     </Table>
   )
 }

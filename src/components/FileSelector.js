@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styled from 'styled-components'
-import { base } from 'grommet/themes'
 
 function FileSelector({ handleSelection }) {
   const onDrop = useCallback(acceptedFiles => {
@@ -18,17 +17,16 @@ function FileSelector({ handleSelection }) {
   )
 }
 
-const grommetColors = base.global.colors
-
+// TODO: add color variables
 const DropZone = styled.div`
-  border: 2.5px dashed ${grommetColors['light-5']};
+  border: 2.5px dashed gray;
   cursor: pointer;
   padding: 15px;
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
   &:hover {
-    border: 2.5px dashed ${grommetColors.brand};
+    border: 2.5px dashed gray;
   }
 `
 
