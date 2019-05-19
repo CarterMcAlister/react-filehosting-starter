@@ -1,14 +1,15 @@
-import React, { Component, Fragment, useState, useEffect } from 'react'
-import { Auth } from 'aws-amplify'
-import { Link, withRouter } from 'react-router-dom'
-import { Nav, Navbar, NavItem } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import React, {useState, useEffect} from 'react'
+import {Auth} from 'aws-amplify'
+import {withRouter} from 'react-router-dom'
 import Routes from './Routes'
 import './App.css'
+import MainNav from './components/MainNav'
 
 function App(props) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isAuthenticating, setIsAuthenticating] = useState(true)
+  const [isAuthenticated,
+    setIsAuthenticated] = useState(false)
+  const [isAuthenticating,
+    setIsAuthenticating] = useState(true)
 
   useEffect(() => {
     async function getAuthSession() {
@@ -37,42 +38,16 @@ function App(props) {
 
     setIsAuthenticated(false)
 
-    props.history.push('/login')
+    props
+      .history
+      .push('/login')
   }
-  return (
-    !isAuthenticating && (
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Brand>
-            <Link to="/">React Filehosting Starter</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse>
-            <Nav pullRight>
-              {isAuthenticated ? (
-                <Fragment>
-                  <LinkContainer to="/profile">
-                    <NavItem>Profile</NavItem>
-                  </LinkContainer>
-                  <NavItem onClick={handleLogout}>Logout</NavItem>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <LinkContainer to="/signup">
-                    <NavItem>Signup</NavItem>
-                  </LinkContainer>
-                  <LinkContainer to="/login">
-                    <NavItem>Login</NavItem>
-                  </LinkContainer>
-                </Fragment>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Routes childProps={childProps} />
-      </div>
-    )
-  )
+  return (!isAuthenticating && (
+    <div className="App container">
+      <MainNav handleLogout={handleLogout} isAuthenticated={isAuthenticated}/>
+      <Routes childProps={childProps}/>
+    </div>
+  ))
 }
 
 export default withRouter(App)
