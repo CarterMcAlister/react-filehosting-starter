@@ -5,6 +5,7 @@ import { s3Upload } from '../libs/awsLib'
 import config from '../config'
 import FileSelector from '../components/FileSelector'
 import SelectedFiles from '../components/SelectedFiles'
+import SelectedImages from '../components/SelectedImages'
 
 import { Form, FormField, TextInput, TextArea } from 'grommet'
 
@@ -14,6 +15,7 @@ function Upload(props) {
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
+  const [images, setImages] = useState([])
   const [files, setFiles] = useState([])
 
   const upload = item => {
@@ -46,6 +48,11 @@ function Upload(props) {
     }
   }
 
+  const selection = (item) => {
+    console.log(files.concat(item))
+    setFiles(files.concat(item))
+  }
+
   return (
     <div className="Upload">
       <Form onSubmit={handleSubmit}>
@@ -67,9 +74,13 @@ function Upload(props) {
             value={description}
           />
         </FormField>
+        <FormField label="Image(s)" name="File">
+          <SelectedImages images={images} />
+          <FileSelector handleSelection={selectedImages => setImages([...images, ...selectedImages])} />
+        </FormField>
         <FormField label="File(s)" name="File">
           <SelectedFiles files={files} />
-          <FileSelector handleSelection={selectedFiles => setFiles(selectedFiles)} />
+          <FileSelector handleSelection={selectedFiles => selection(selectedFiles)} />
         </FormField>
         <LoaderButton
           type="submit"
