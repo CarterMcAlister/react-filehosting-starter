@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { API } from "aws-amplify"
-import { Link, NavLink } from "react-router-dom"
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap"
+import React, { useState, useEffect } from 'react'
+import { API } from 'aws-amplify'
+import { Link, NavLink } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import styled from 'styled-components'
 
 function Profile({ isAuthenticated }) {
@@ -11,39 +11,34 @@ function Profile({ isAuthenticated }) {
   useEffect(() => {
     async function getList() {
       try {
-        const list = await API.get("list", "/list")
+        const list = await API.get('list', '/list')
         setList(list)
-  
       } catch (e) {
         alert(e)
       }
     }
 
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       return
     }
 
     getList()
 
     setIsLoading(false)
-
   }, [])
 
   const renderlist = () => {
     return (
       <div className="list">
-        <PageHeader>Your Uploads</PageHeader>
+        <h1>Your Uploads</h1>
         <ListGroup>
-          <NavLink
-              key="new"
-              to="uploads/new"
-            >
-              <ListGroupItem>
-                <h4>
-                  <b>{"\uFF0B"}</b> Upload a file
-                </h4>
-              </ListGroupItem>
-            </NavLink>
+          <NavLink key="new" to="uploads/new">
+            <ListGroupItem>
+              <h4>
+                <b>{'\uFF0B'}</b> Upload a file
+              </h4>
+            </ListGroupItem>
+          </NavLink>
         </ListGroup>
         {!isLoading && renderFileList(list)}
       </div>
@@ -51,19 +46,15 @@ function Profile({ isAuthenticated }) {
   }
 
   const renderFileList = list => {
-    return list.map(item =>
-          <NavLink
-            key={item.uploadId}
-            to={`/uploads/${item.uploadId}`}
-          >
-            <UploadedListItem>
-              <span>{item.name}</span>
-              <span>{new Date(item.createdAt).toLocaleDateString()}</span>
-            </UploadedListItem>
-          </NavLink>
-    )
+    return list.map(item => (
+      <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
+        <UploadedListItem>
+          <span>{item.name}</span>
+          <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+        </UploadedListItem>
+      </NavLink>
+    ))
   }
-
 
   const renderLander = () => {
     return (
@@ -82,12 +73,7 @@ function Profile({ isAuthenticated }) {
     )
   }
 
-  return (
-    <div className="Profile">
-      {isAuthenticated ? renderlist() : renderLander()}
-    </div>
-  )
-
+  return <div className="Profile">{isAuthenticated ? renderlist() : renderLander()}</div>
 }
 
 const UploadedListItem = styled(ListGroupItem)`

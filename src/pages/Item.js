@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react"
-import { API, Storage } from "aws-amplify"
-import { FormGroup, FormControl, ControlLabel } from "react-bootstrap"
-import LoaderButton from "../components/LoaderButton"
-import { s3Upload } from "../libs/awsLib"
-import config from "../config"
+import React, { useState, useEffect } from 'react'
+import { API, Storage } from 'aws-amplify'
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import LoaderButton from '../components/LoaderButton'
+import { s3Upload } from '../libs/awsLib'
+import config from '../config'
 import SelectedFiles from '../components/SelectedFiles'
 
 // #TODO: get file ref link on click, store more file data for retrieval, finish jsx, style, cleanup, create EditUpload page
 
-const Item = (props) => {
+const Item = props => {
   let file = null
   const [isLoading, setIsLoading] = useState(null)
   const [isDeleting, setIsDeleting] = useState(null)
@@ -19,8 +19,8 @@ const Item = (props) => {
     async function getItem() {
       try {
         let fileReferences
-        const item = await API.get("file", `/file/${props.match.params.id}`)
-        
+        const item = await API.get('file', `/file/${props.match.params.id}`)
+
         if (item.fileReference) {
           fileReferences = await Promise.all(
             item.fileReference.map(async fileRef => {
@@ -41,15 +41,14 @@ const Item = (props) => {
     getItem()
   }, [])
 
-  const saveitem = item => 
-    API.put("file", `/file/${props.match.params.id}`, {
+  const saveitem = item =>
+    API.put('file', `/file/${props.match.params.id}`, {
       body: item
     })
-  
 
-  const deleteitem = () => API.del("file", `/file/${props.match.params.id}`)
+  const deleteitem = () => API.del('file', `/file/${props.match.params.id}`)
 
-  const formatFilename = str => str.replace(/^\w+-/, "")
+  const formatFilename = str => str.replace(/^\w+-/, '')
 
   const handleFileChange = event => {
     file = event.target.files[0]
@@ -101,7 +100,7 @@ const Item = (props) => {
 
   return (
     <div className="Item">
-      {item &&
+      {item && (
         <div>
           <div>{item.name}</div>
           <div>Category: {item.category}</div>
@@ -109,11 +108,10 @@ const Item = (props) => {
 
           <h4>Files</h4>
           <SelectedFiles files={files} />
-        </div>  
-      }
+        </div>
+      )}
     </div>
   )
-
 }
 
 export default Item

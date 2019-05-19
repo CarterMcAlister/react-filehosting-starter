@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { API } from "aws-amplify";
-import { Link, NavLink } from "react-router-dom";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-import "./Home.css";
+import React, { useState, useEffect } from 'react'
+import { API } from 'aws-amplify'
+import { Link, NavLink } from 'react-router-dom'
+import { Navbar, ListGroup, ListGroupItem } from 'react-bootstrap'
+import './Home.css'
 
 function Home({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -11,61 +11,43 @@ function Home({ isAuthenticated }) {
   useEffect(() => {
     async function getList() {
       try {
-        const list = await API.get("list", "/list")
+        const list = await API.get('list', '/list')
         // list.shift()
         console.log(list)
         setList(list)
-  
       } catch (e) {
         alert(e)
       }
     }
 
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       return
     }
 
     getList()
 
     setIsLoading(false)
-
   }, [])
 
   const renderlist = () => {
     return (
       <div className="list">
-        <PageHeader>Your Uploads</PageHeader>
-        <ListGroup>
-          <NavLink
-              key="new"
-              to="uploads/new"
-            >
-              <ListGroupItem>
-                <h4>
-                  <b>{"\uFF0B"}</b> Upload a file
-                </h4>
-              </ListGroupItem>
-            </NavLink>
-        </ListGroup>
+        <h1>Recent Uploads</h1>
         {!isLoading && renderFileList(list)}
       </div>
     )
   }
 
   const renderFileList = list => {
-    return list.map(item =>
-          <NavLink
-            key={item.uploadId}
-            to={`/uploads/${item.uploadId}`}
-          >
-            <ListGroupItem>
-              <span>{item.name}</span>
-              <span>{"Created: " + new Date(item.createdAt).toLocaleString()}</span>
-            </ListGroupItem>
-          </NavLink>
-    )
+    return list.map(item => (
+      <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
+        <ListGroupItem>
+          <span>{item.name}</span>
+          <span>{'Created: ' + new Date(item.createdAt).toLocaleString()}</span>
+        </ListGroupItem>
+      </NavLink>
+    ))
   }
-
 
   const renderLander = () => {
     return (
@@ -84,12 +66,7 @@ function Home({ isAuthenticated }) {
     )
   }
 
-  return (
-    <div className="Home">
-      {isAuthenticated ? renderlist() : renderLander()}
-    </div>
-  )
-
+  return <div className="Home">{isAuthenticated ? renderlist() : renderLander()}</div>
 }
 
 export default Home
