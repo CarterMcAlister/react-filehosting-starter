@@ -1,7 +1,9 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
+import { Table, Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-function SelectedFiles({ files }) {
+function SelectedFiles({ files, removeFile }) {
   return (
     <Table responsive>
       <tbody>
@@ -10,12 +12,27 @@ function SelectedFiles({ files }) {
             <td>
               <strong>{file.name}</strong>
             </td>
-            <td style={{ alignItems: 'flex-end' }}>{file.size / 1000}MB</td>
+            <TableCell>
+              <span style={{ paddingRight: '5px' }}>{file.size / 1000} MB </span>
+              <Button variant="danger" size="sm" onClick={() => removeFile(file)}>
+                X
+              </Button>
+            </TableCell>
           </tr>
         ))}
       </tbody>
     </Table>
   )
+}
+
+const TableCell = styled.td`
+  display: flex;
+  justify-content: flex-end;
+`
+
+SelectedFiles.propTypes = {
+  files: PropTypes.arrayOf(Object).isRequired,
+  removeFile: PropTypes.func.isRequired
 }
 
 export default SelectedFiles

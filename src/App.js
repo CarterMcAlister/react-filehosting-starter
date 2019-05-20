@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import {Auth} from 'aws-amplify'
-import {withRouter} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Auth } from 'aws-amplify'
+import { withRouter } from 'react-router-dom'
+import { Container } from 'react-bootstrap'
 import Routes from './Routes'
-import './App.css'
 import MainNav from './components/MainNav'
 
 function App(props) {
-  const [isAuthenticated,
-    setIsAuthenticated] = useState(false)
-  const [isAuthenticating,
-    setIsAuthenticating] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
 
   useEffect(() => {
     async function getAuthSession() {
@@ -29,7 +27,7 @@ function App(props) {
   }, [])
 
   const childProps = {
-    isAuthenticated: isAuthenticated,
+    isAuthenticated,
     userHasAuthenticated: setIsAuthenticated
   }
 
@@ -38,16 +36,16 @@ function App(props) {
 
     setIsAuthenticated(false)
 
-    props
-      .history
-      .push('/login')
+    props.history.push('/login')
   }
-  return (!isAuthenticating && (
-    <div className="App container">
-      <MainNav handleLogout={handleLogout} isAuthenticated={isAuthenticated}/>
-      <Routes childProps={childProps}/>
-    </div>
-  ))
+  return (
+    !isAuthenticating && (
+      <Container>
+        <MainNav handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
+        <Routes childProps={childProps} />
+      </Container>
+    )
+  )
 }
 
 export default withRouter(App)
