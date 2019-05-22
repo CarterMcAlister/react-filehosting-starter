@@ -40,10 +40,10 @@ function App(props) {
   }
   return (
     !isAuthenticating && (
-      <Container>
+      <div>
         <MainNav handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
         <Routes childProps={childProps} />
-      </Container>
+      </div>
     )
   )
 }

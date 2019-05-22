@@ -1,39 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import { API, Storage } from 'aws-amplify'
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import { Container, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
+import styled from 'styled-components'
 import LoaderButton from '../components/LoaderButton'
+import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import { s3Upload } from '../libs/awsLib'
 import config from '../config'
 import SelectedFiles from '../components/SelectedFiles'
 
-// #TODO: get file ref link on click, store more file data for retrieval, finish jsx, style, cleanup, create EditUpload page
+// #TODO: get file ref link on click, finish jsx, style, cleanup, create EditUpload page
 
-const Item = props => {
-  let file = null
-  const [isLoading, setIsLoading] = useState(null)
-  const [isDeleting, setIsDeleting] = useState(null)
-  const [item, setItem] = useState(null)
-  const [files, setFiles] = useState([])
+// eslint-disable-next-line react/prop-types
+const Item = ({ match }) => {
+  const [item, setItem] = useState(placeholder)
+  const [images, setImages] = useState(imagePlaceholder)
+  const [featuredImg, setFeaturedImg] = useState(null)
 
   useEffect(() => {
     async function getItem() {
       try {
-        let fileReferences
-        const item = await API.get('file', `/file/${props.match.params.id}`)
-
-        if (item.fileReference) {
-          fileReferences = await Promise.all(
-            item.fileReference.map(async fileRef => {
-              return {
-                name: fileRef,
-                link: await Storage.vault.get(fileRef)
-              }
-            })
-          )
-        }
-        setItem(item)
-        setFiles(fileReferences)
-        console.log(item)
+        // Get item data
+        const itemData = await API.get('file', `/file/${match.params.id}`)
+        setItem(itemData)
+        // Get image URLs
+        const imageRefs = await getFiles(itemData.imageReference)
+        setFeaturedImg(imageRefs.shift().link)
+        console.log(imageRefs)
+        setImages(imageRefs)
       } catch (e) {
         alert(e)
       }
@@ -41,77 +34,102 @@ const Item = props => {
     getItem()
   }, [])
 
-  const saveitem = item =>
-    API.put('file', `/file/${props.match.params.id}`, {
-      body: item
-    })
+  async function getFiles(fileRefs) {
+    if (!fileRefs) return []
 
-  const deleteitem = () => API.del('file', `/file/${props.match.params.id}`)
-
-  const formatFilename = str => str.replace(/^\w+-/, '')
-
-  const handleFileChange = event => {
-    file = event.target.files[0]
+    const fileReferences = await Promise.all(
+      fileRefs.map(async fileRef => {
+        return {
+          name: fileRef,
+          link: await Storage.vault.get(fileRef)
+        }
+      })
+    )
+    return fileReferences
   }
 
-  // const handleSubmit = async event => {
-  //   setIsLoading(true)
-
-  //   try {
-  //     // Upload attached files
-  //     const fileReference = await Promise.all(
-  //       files.map(async file => await s3Upload(file))
-  //     )
-
-  //     // Add db entry for item
-  //     await upload({
-  //       fileReference,
-  //       name,
-  //       category,
-  //       description
-  //     })
-  //     props.history.push('/')
-  //   } catch (e) {
-  //     alert(e)
-  //     setIsLoading(false)
-  //   }
-  // }
-
-  // const handleDelete = async event => {
-
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to delete this item?"
-  //   )
-
-  //   if (!confirmed) {
-  //     return
-  //   }
-
-  //   setIsDeleting(true)
-
-  //   try {
-  //     await deleteitem()
-  //     props.history.push("/")
-  //   } catch (e) {
-  //     alert(e)
-  //     setIsDeleting(false)
-  //   }
-  // }
+  const downloadItem = async fileRef => {
+    const itemLink = await getFiles([fileRef])
+    window.location.href = itemLink[0].link
+  }
 
   return (
-    <div className="Item">
-      {item && (
-        <div>
-          <div>{item.name}</div>
-          <div>Category: {item.category}</div>
-          <div>Description: {item.description}</div>
-
-          <h4>Files</h4>
-          <SelectedFiles files={files} />
-        </div>
-      )}
+    <div>
+      <div>
+        <Header bgImg={featuredImg}>
+          <SubHeader>
+            <Container fluid>
+              <h1>{item.name}</h1>
+              <h2>{item.category}</h2>
+            </Container>
+          </SubHeader>
+        </Header>
+        <Container fluid>
+          <section>
+            <h2>Images</h2>
+            {images}
+          </section>
+          <section>
+            <h2>About</h2>
+            <p>{item.description}</p>
+          </section>
+          <section>
+            <h2>Files</h2>
+            <FileList files={item.fileReference} handleClick={downloadItem} />
+          </section>
+        </Container>
+      </div>
     </div>
   )
 }
+
+const FileList = ({ files, handleClick }) =>
+  files.map(file => (
+    <ListGroup>
+      <Button
+        variant="link"
+        onClick={() => {
+          handleClick(file)
+        }}>
+        <UploadedListItem>{file}</UploadedListItem>
+      </Button>
+    </ListGroup>
+  ))
+
+const placeholder = {
+  name: <LoadingPlaceholder width="400px" baseColor="#ddd" />,
+  category: <LoadingPlaceholder width="600px" baseColor="#ddd" />,
+  description: <LoadingPlaceholder count={3} />,
+  fileReference: [
+    <LoadingPlaceholder width="400px" />,
+    <LoadingPlaceholder width="400px" />,
+    <LoadingPlaceholder width="400px" />,
+    <LoadingPlaceholder width="400px" />
+  ]
+}
+const imagePlaceholder = [<LoadingPlaceholder width="220px" height="180px" count={4} style={{ marginLeft: '20px' }} />]
+
+const Header = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #0d2c54;
+  background-image: url('${props => props.bgImg}');
+  background-size: cover;
+  width: 100%;
+  height: 300px;
+  margin-bottom: 15px;
+  /* border-radius: 0 0 60px 60px; */
+`
+
+const SubHeader = styled.div`
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  /* padding-left: 20px; */
+`
+const UploadedListItem = styled(ListGroupItem)`
+  display: flex;
+  justify-content: space-between;
+`
 
 export default Item

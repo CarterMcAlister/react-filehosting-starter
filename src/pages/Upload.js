@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { API } from 'aws-amplify'
-import { Form } from 'react-bootstrap'
+import { Form, Container } from 'react-bootstrap'
 
 import LoaderButton from '../components/LoaderButton'
 import { s3Upload } from '../libs/awsLib'
@@ -27,27 +27,30 @@ function Upload({ history }) {
   const handleSubmit = async event => {
     const form = event.currentTarget
     setValidated(true)
+    event.preventDefault()
 
     if (form.checkValidity() === false) {
-      event.preventDefault()
       event.stopPropagation()
       return
     }
-
     setIsLoading(true)
 
     try {
       // Upload attached files
-      const fileReference = await Promise.all(files.map(async file => await s3Upload(file)))
+      const fileReference = await Promise.all(files.map(async file => s3Upload(file)))
+
+      // Upload attached images
+      const imageReference = await Promise.all(images.map(async image => s3Upload(image)))
 
       // Add db entry for item
       await upload({
         fileReference,
+        imageReference,
         name,
         category,
         description
       })
-      history.push('/')
+      history.push('/profile')
     } catch (e) {
       alert(e)
       setIsLoading(false)
@@ -55,7 +58,7 @@ function Upload({ history }) {
   }
 
   return (
-    <div className="Upload">
+    <Container fluid>
       <Form onSubmit={handleSubmit} validated={validated} noValidate>
         <Form.Group controlId="Name">
           <Form.Label>File Name</Form.Label>
@@ -106,7 +109,7 @@ function Upload({ history }) {
         </Form.Group>
         <LoaderButton type="submit" isLoading={isLoading} text="Upload" loadingText="Uploading..." />
       </Form>
-    </div>
+    </Container>
   )
 }
 

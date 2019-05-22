@@ -28,6 +28,7 @@ function SelectedFiles({ files, removeFile }) {
 const TableCell = styled.td`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 `
 
 SelectedFiles.propTypes = {
