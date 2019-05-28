@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { ListGroup, ListGroupItem } from 'react-bootstrap'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 
 function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)

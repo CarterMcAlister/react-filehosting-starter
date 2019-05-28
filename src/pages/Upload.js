@@ -72,7 +72,12 @@ function Upload({ history }) {
         </Form.Group>
         <Form.Group controlId="Description">
           <Form.Label>File Description</Form.Label>
-          <Form.Control as="textarea" onChange={event => setDescription(event.target.value)} value={description} required />
+          <Form.Control
+            as="textarea"
+            onChange={event => setDescription(event.target.value)}
+            value={description}
+            required
+          />
           <Form.Control.Feedback type="invalid">Please provide a valid description.</Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId="Image">

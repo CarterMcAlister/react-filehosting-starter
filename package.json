@@ -6,6 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "@xstyled/styled-components": "^1.0.3",
     "aws-amplify": "^1.1.28",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -16,6 +17,7 @@
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^3.0.1",
+    "react-slick": "^0.24.0",
     "styled-components": "^4.2.0"
   },
   "scripts": {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { API, Storage } from 'aws-amplify'
 import { Container, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 import LoaderButton from '../components/LoaderButton'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import { s3Upload } from '../libs/awsLib'
@@ -73,7 +73,7 @@ const Item = ({ match }) => {
         <Container fluid>
           <section>
             <h2>Images</h2>
-            <Slider lazyLoad={true} slidesToShow={3} slidesToScroll={3}>
+            <Slider lazyLoad slidesToShow={3} slidesToScroll={3}>
               {images.map(image => (
                 <img
                   src={image}

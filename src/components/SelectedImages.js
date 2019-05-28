@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 import PropTypes from 'prop-types'
 import ImageModal from './ImageModal'
 

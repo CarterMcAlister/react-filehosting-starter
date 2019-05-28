@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 import { Form } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 

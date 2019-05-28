@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 
 function SelectedFiles({ files, removeFile }) {
   return (

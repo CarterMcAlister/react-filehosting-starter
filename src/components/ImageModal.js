@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from '@xstyled/styled-components'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css, keyframes } from '@xstyled/styled-components'
 
 const LoadingPlaceholder = ({
   baseColor = '#eee',
