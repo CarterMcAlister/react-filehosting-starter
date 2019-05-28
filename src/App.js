@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Routes from './Routes'
 import MainNav from './components/MainNav'
+import './libs/fontLibrary'
 
 function App(props) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)

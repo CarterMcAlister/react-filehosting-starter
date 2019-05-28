@@ -7,6 +7,9 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import { s3Upload } from '../libs/awsLib'
 import config from '../config'
 import SelectedFiles from '../components/SelectedFiles'
+import Slider from 'react-slick'
+import Lightbox from 'react-image-lightbox'
+import 'react-image-lightbox/style.css' // This only needs to be imported once in your app
 
 // #TODO: get file ref link on click, finish jsx, style, cleanup, create EditUpload page
 
@@ -15,6 +18,9 @@ const Item = ({ match }) => {
   const [item, setItem] = useState(placeholder)
   const [images, setImages] = useState(imagePlaceholder)
   const [featuredImg, setFeaturedImg] = useState(null)
+  // For lightbox
+  const [photoIndex, setPhotoIndex] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     async function getItem() {
@@ -26,7 +32,7 @@ const Item = ({ match }) => {
         const imageRefs = await getFiles(itemData.imageReference)
         setFeaturedImg(imageRefs.shift().link)
         console.log(imageRefs)
-        setImages(imageRefs)
+        setImages(imageRefs.map(image => image.link))
       } catch (e) {
         alert(e)
       }
@@ -67,7 +73,28 @@ const Item = ({ match }) => {
         <Container fluid>
           <section>
             <h2>Images</h2>
-            {images}
+            <Slider lazyLoad={true} slidesToShow={3} slidesToScroll={3}>
+              {images.map(image => (
+                <img
+                  src={image}
+                  style={{ maxWidth: '200px' }}
+                  onClick={() => {
+                    setPhotoIndex(images.indexOf(image))
+                    setIsOpen(true)
+                  }}
+                />
+              ))}
+            </Slider>
+            {isOpen && (
+              <Lightbox>
+                mainSrc={images[photoIndex]}
+                nextSrc={images[(photoIndex + 1) % images.length]}
+                prevSrc={images[(photoIndex + images.length - 1) % images.length]}
+                onCloseRequest={() => setIsOpen(false)}
+                onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}}
+                onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}}
+              </Lightbox>
+            )}
           </section>
           <section>
             <h2>About</h2>
@@ -113,7 +140,7 @@ const Header = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: #0d2c54;
+  background: #EEE;
   background-image: url('${props => props.bgImg}');
   background-size: cover;
   width: 100%;
@@ -125,7 +152,7 @@ const Header = styled.section`
 const SubHeader = styled.div`
   background: rgba(0, 0, 0, 0.3);
   color: white;
-  /* padding-left: 20px; */
+  padding-top: 7px;
 `
 const UploadedListItem = styled(ListGroupItem)`
   display: flex;
