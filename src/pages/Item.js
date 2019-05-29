@@ -2,25 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { API, Storage } from 'aws-amplify'
 import { Container, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
 import styled from '@xstyled/styled-components'
-import LoaderButton from '../components/LoaderButton'
-import LoadingPlaceholder from '../components/LoadingPlaceholder'
-import { s3Upload } from '../libs/awsLib'
-import config from '../config'
-import SelectedFiles from '../components/SelectedFiles'
 import Slider from 'react-slick'
 import Lightbox from 'react-image-lightbox'
 import 'react-image-lightbox/style.css' // This only needs to be imported once in your app
+import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import Image from '../components/Image'
 
 // #TODO: get file ref link on click, finish jsx, style, cleanup, create EditUpload page
 
 // eslint-disable-next-line react/prop-types
 const Item = ({ match }) => {
   const [item, setItem] = useState(placeholder)
-  const [images, setImages] = useState(imagePlaceholder)
   const [featuredImg, setFeaturedImg] = useState(null)
   // For lightbox
   const [photoIndex, setPhotoIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const [images, setImages] = useState([null])
 
   useEffect(() => {
     async function getItem() {
@@ -30,7 +27,7 @@ const Item = ({ match }) => {
         setItem(itemData)
         // Get image URLs
         const imageRefs = await getFiles(itemData.imageReference)
-        setFeaturedImg(imageRefs.shift().link)
+        setFeaturedImg(imageRefs[0].link)
         console.log(imageRefs)
         setImages(imageRefs.map(image => image.link))
       } catch (e) {
@@ -73,27 +70,27 @@ const Item = ({ match }) => {
         <Container fluid>
           <section>
             <h2>Images</h2>
-            <Slider lazyLoad slidesToShow={3} slidesToScroll={3}>
-              {images.map(image => (
-                <img
-                  src={image}
-                  style={{ maxWidth: '200px' }}
+            <Slider slidesToShow={images.length > 4 ? 4 : images.length} slidesToScroll={2} lazyLoad variableWidth>
+              {images.map((image, index) => (
+                <SliderImgWrapper
                   onClick={() => {
-                    setPhotoIndex(images.indexOf(image))
+                    setPhotoIndex(index)
                     setIsOpen(true)
-                  }}
-                />
+                  }}>
+                  <Image src={image} />
+                </SliderImgWrapper>
               ))}
             </Slider>
+
             {isOpen && (
-              <Lightbox>
+              <Lightbox
                 mainSrc={images[photoIndex]}
                 nextSrc={images[(photoIndex + 1) % images.length]}
                 prevSrc={images[(photoIndex + images.length - 1) % images.length]}
                 onCloseRequest={() => setIsOpen(false)}
-                onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}}
-                onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}}
-              </Lightbox>
+                onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}
+                onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}
+              />
             )}
           </section>
           <section>
@@ -134,7 +131,11 @@ const placeholder = {
     <LoadingPlaceholder width="400px" />
   ]
 }
-const imagePlaceholder = [<LoadingPlaceholder width="220px" height="180px" count={4} style={{ marginLeft: '20px' }} />]
+
+const SliderImgWrapper = styled.a`
+  margin: 0 16px 2px 0;
+  overflow: hidden;
+`
 
 const Header = styled.section`
   display: flex;

@@ -11,7 +11,6 @@ const LoadingPlaceholder = ({
   circle = false,
   style = {}
 }) => {
-  console.log(width)
   const PlaceholderItem = styled.span`
     ${placeholderStyles}
     background-color: ${baseColor};
