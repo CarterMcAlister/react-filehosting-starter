@@ -13,6 +13,11 @@ const MainNav = ({ isAuthenticated, handleLogout }) => (
         {isAuthenticated ? (
           <>
             <Nav.Item>
+              <LinkContainer to="/uploads/new">
+                <Nav.Link>Upload</Nav.Link>
+              </LinkContainer>
+            </Nav.Item>
+            <Nav.Item>
               <LinkContainer to="/profile">
                 <Nav.Link>Profile</Nav.Link>
               </LinkContainer>

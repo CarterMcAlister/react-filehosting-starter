@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@xstyled/styled-components'
+import { Image as BootstrapImage } from 'react-bootstrap'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 
 const Image = ({ src, width = '300px', height = '160px', ...otherProps }) => {
@@ -20,7 +21,7 @@ const Image = ({ src, width = '300px', height = '160px', ...otherProps }) => {
   )
 }
 
-const StyledImage = styled.img`
+const StyledImage = styled(BootstrapImage)`
   visibility: ${props => (props.visible ? 'visible' : 'hidden')};
 `
 

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
-import { ListGroup, ListGroupItem } from 'react-bootstrap'
+import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import styled from '@xstyled/styled-components'
+import Image from '../components/Image'
+
 
 function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -30,7 +33,6 @@ function Profile({ isAuthenticated }) {
   const renderlist = () => {
     return (
       <div className="list">
-        <h1>Your Uploads</h1>
         <ListGroup>
           <NavLink key="new" to="uploads/new">
             <ListGroupItem>
@@ -56,29 +58,42 @@ function Profile({ isAuthenticated }) {
     ))
   }
 
-  const renderLander = () => {
-    return (
-      <div className="lander">
-        <h1>Filehosting Starter</h1>
-        <p>A Starter for creating a file hosting site using React and Serverless Node.js</p>
-        <div>
-          <Link to="/login" className="btn btn-info btn-lg">
-            Login
-          </Link>
-          <Link to="/signup" className="btn btn-success btn-lg">
-            Signup
-          </Link>
-        </div>
-      </div>
-    )
-  }
+  return (
+    <div>
+      {/* ? Classname not getting set from styled-components properly - need to fix */}
+      <UserInfoCard className="card">
+        {/* User Info */}
+        <Image src="https://via.placeholder.com/200x200" />
+        {/* <Card.Img variant="left" src="https://via.placeholder.com/100" /> */}
+        <Card.Body>
+          <Card.Title>Username</Card.Title>
+          <Card.Subtitle>Email</Card.Subtitle>
+          <Card.Text>Join Date</Card.Text>
+          <Card.Subtitle>About</Card.Subtitle>
+          <Card.Text>About placeholder</Card.Text>
+        </Card.Body>
+        {/* If user's own profile */}
+        <Icon icon="user-edit" />
 
-  return <div className="Profile">{isAuthenticated ? renderlist() : renderLander()}</div>
+      </UserInfoCard>
+      <section>
+        {/* Uploads */}
+        <h1>Uploads</h1>
+        {renderFileList(list)}
+      </section>
+    </div>
+  )
 }
 
 const UploadedListItem = styled(ListGroupItem)`
   display: flex;
   justify-content: space-between;
+`
+
+const UserInfoCard = styled(Card)`
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
 `
 
 export default Profile
