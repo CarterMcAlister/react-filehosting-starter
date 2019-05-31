@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { Navbar, ListGroup, ListGroupItem } from 'react-bootstrap'
+import UploadsList from '../components/UploadsList'
 import './Home.css'
 
 function Home({ isAuthenticated }) {
@@ -33,20 +34,9 @@ function Home({ isAuthenticated }) {
     return (
       <div className="list">
         <h1>Recent Uploads</h1>
-        {!isLoading && renderFileList(list)}
+        {!isLoading && <UploadsList list={list} />}
       </div>
     )
-  }
-
-  const renderFileList = list => {
-    return list.map(item => (
-      <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
-        <ListGroupItem>
-          <span>{item.name}</span>
-          <span>{'Created: ' + new Date(item.createdAt).toLocaleString()}</span>
-        </ListGroupItem>
-      </NavLink>
-    ))
   }
 
   const renderLander = () => {

@@ -3,9 +3,10 @@ import { API, Auth } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import styled from '@xstyled/styled-components'
+import styled, { css } from '@xstyled/styled-components'
 import Image from '../components/Image'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import UploadsList from '../components/UploadsList'
 
 function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -70,21 +71,28 @@ function Profile({ isAuthenticated }) {
         <Card.Body>
           <Card.Title>{username}</Card.Title>
           <Card.Subtitle>{email}</Card.Subtitle>
+          <Button
+            variant="link"
+            css={css`
+              padding-left: 0;
+            `}>
+            Change Password
+          </Button>
         </Card.Body>
       </UserInfoCard>
       <section>
         {/* Uploads */}
         <h1>My Uploads</h1>
-        {renderFileList(list)}
+        <UploadsList list={list} />
       </section>
     </div>
   )
 }
 
 const placeholderList = [
-  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> },
-  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> },
-  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> }
+  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> },
+  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> },
+  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> }
 ]
 
 const UploadedListItem = styled(ListGroupItem)`
@@ -95,7 +103,7 @@ const UploadedListItem = styled(ListGroupItem)`
 const UserInfoCard = styled(Card)`
   display: flex;
   flex-direction: row;
-  margin: 20px;
+  margin: 20px 0;
 `
 
 export default Profile

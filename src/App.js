@@ -43,7 +43,9 @@ function App(props) {
     !isAuthenticating && (
       <div>
         <MainNav handleLogout={handleLogout} isAuthenticated={isAuthenticated} />
-        <Routes childProps={childProps} />
+        <Container fluid>
+          <Routes childProps={childProps} />
+        </Container>
       </div>
     )
   )
