@@ -17,7 +17,8 @@ const Item = ({ match }) => {
   // For lightbox
   const [photoIndex, setPhotoIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
-  const [images, setImages] = useState([null])
+  // const [images, setImages] = useState([null, null, null, null])
+  const [images, setImages] = useState([null, null, null, null])
 
   useEffect(() => {
     async function getItem() {
@@ -69,7 +70,6 @@ const Item = ({ match }) => {
         </Header>
         <Container fluid>
           <section>
-            <h2>Images</h2>
             <Slider slidesToShow={images.length > 4 ? 4 : images.length} slidesToScroll={2} lazyLoad variableWidth>
               {images.map((image, index) => (
                 <SliderImgWrapper
@@ -135,6 +135,9 @@ const placeholder = {
 const SliderImgWrapper = styled.a`
   margin: 0 16px 2px 0;
   overflow: hidden;
+  width: 368px !important; /* Overrides the slick slider applied styles */
+  height: 207px;
+  cursor: pointer;
 `
 
 const Header = styled.section`

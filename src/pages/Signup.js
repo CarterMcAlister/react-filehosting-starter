@@ -5,7 +5,8 @@ import LoaderButton from '../components/LoaderButton'
 
 const Signup = props => {
   const [isLoading, setIsLoading] = useState(false)
-  const [{ email, password, confirmPassword, confirmationCode }, setUserInput] = useState({
+  const [{ username, email, password, confirmPassword, confirmationCode }, setUserInput] = useState({
+    username,
     email: '',
     password: '',
     confirmPassword: '',
@@ -32,8 +33,11 @@ const Signup = props => {
 
     try {
       const newUserData = await Auth.signUp({
-        username: email,
-        password: password
+        username,
+        password,
+        attributes: {
+          email
+        }
       })
       setNewUser(newUserData)
     } catch (e) {
@@ -48,7 +52,7 @@ const Signup = props => {
     setIsLoading(true)
 
     try {
-      await Auth.confirmSignUp(email, confirmationCode)
+      await Auth.confirmSignUp(username, confirmationCode)
       await Auth.signIn(email, password)
 
       props.userHasAuthenticated(true)
@@ -83,9 +87,13 @@ const Signup = props => {
   const renderForm = () => {
     return (
       <form onSubmit={handleSubmit}>
+        <Form.Group controlId="username" bsSize="large">
+          <Form.Label>Username</Form.Label>
+          <Form.Control autoFocus type="text" value={username} onChange={handleChange} />
+        </Form.Group>
         <Form.Group controlId="email" bsSize="large">
           <Form.Label>Email</Form.Label>
-          <Form.Control autoFocus type="email" value={email} onChange={handleChange} />
+          <Form.Control type="email" value={email} onChange={handleChange} />
         </Form.Group>
         <Form.Group controlId="password" bsSize="large">
           <Form.Label>Password</Form.Label>

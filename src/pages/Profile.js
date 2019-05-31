@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { API } from 'aws-amplify'
+import { API, Auth } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import styled from '@xstyled/styled-components'
 import Image from '../components/Image'
-
+import LoadingPlaceholder from '../components/LoadingPlaceholder'
 
 function Profile({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
-  const [list, setList] = useState([])
+  const [list, setList] = useState(placeholderList)
+  const [profileImage, setProfileImage] = useState(null)
+  const [username, setUserName] = useState(<LoadingPlaceholder width="400px" baseColor="#ddd" />)
+  const [email, setEmail] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
 
   useEffect(() => {
+    Auth.currentAuthenticatedUser().then(user => console.log(user))
     async function getList() {
       try {
         const list = await API.get('list', '/list')
@@ -21,38 +25,37 @@ function Profile({ isAuthenticated }) {
       }
     }
 
+    async function getUserInfo() {
+      try {
+        const {
+          username,
+          attributes: { email }
+        } = await Auth.currentAuthenticatedUser()
+
+        setProfileImage(`https://avatar.tobi.sh/${username}.svg?text=${username[0]}`)
+        setUserName(username)
+        setEmail(email)
+      } catch (e) {
+        alert(e)
+      }
+    }
+
     if (!isAuthenticated) {
       return
     }
 
+    getUserInfo()
     getList()
 
     setIsLoading(false)
   }, [])
-
-  const renderlist = () => {
-    return (
-      <div className="list">
-        <ListGroup>
-          <NavLink key="new" to="uploads/new">
-            <ListGroupItem>
-              <h4>
-                <b>{'\uFF0B'}</b> Upload a file
-              </h4>
-            </ListGroupItem>
-          </NavLink>
-        </ListGroup>
-        {!isLoading && renderFileList(list)}
-      </div>
-    )
-  }
 
   const renderFileList = list => {
     return list.map(item => (
       <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
         <UploadedListItem>
           <span>{item.name}</span>
-          <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+          <span>{new Date(item.createdAt).toLocaleDateString() && item.createdAt}</span>
         </UploadedListItem>
       </NavLink>
     ))
@@ -63,27 +66,26 @@ function Profile({ isAuthenticated }) {
       {/* ? Classname not getting set from styled-components properly - need to fix */}
       <UserInfoCard className="card">
         {/* User Info */}
-        <Image src="https://via.placeholder.com/200x200" />
-        {/* <Card.Img variant="left" src="https://via.placeholder.com/100" /> */}
+        <Image src={profileImage} height="200px" width="200px" baseColor="#ddd" />
         <Card.Body>
-          <Card.Title>Username</Card.Title>
-          <Card.Subtitle>Email</Card.Subtitle>
-          <Card.Text>Join Date</Card.Text>
-          <Card.Subtitle>About</Card.Subtitle>
-          <Card.Text>About placeholder</Card.Text>
+          <Card.Title>{username}</Card.Title>
+          <Card.Subtitle>{email}</Card.Subtitle>
         </Card.Body>
-        {/* If user's own profile */}
-        <Icon icon="user-edit" />
-
       </UserInfoCard>
       <section>
         {/* Uploads */}
-        <h1>Uploads</h1>
+        <h1>My Uploads</h1>
         {renderFileList(list)}
       </section>
     </div>
   )
 }
+
+const placeholderList = [
+  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> },
+  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> },
+  { name: <LoadingPlaceholder width="400px" baseColor="#ddd" /> }
+]
 
 const UploadedListItem = styled(ListGroupItem)`
   display: flex;

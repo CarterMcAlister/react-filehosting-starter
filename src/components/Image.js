@@ -1,28 +1,21 @@
 import React, { useState } from 'react'
 import styled from '@xstyled/styled-components'
-import { Image as BootstrapImage } from 'react-bootstrap'
-import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import LoadingPlaceholder from './LoadingPlaceholder'
 
-const Image = ({ src, width = '300px', height = '160px', ...otherProps }) => {
+const Image = ({ src, ...otherProps }) => {
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <>
-      {!imageLoaded && <LoadingPlaceholder width={width} height={height} />}
-      <StyledImage
-        src={src}
-        width={width}
-        height={height}
-        {...otherProps}
-        onLoad={() => setImageLoaded(true)}
-        visible={imageLoaded}
-      />
+      {!imageLoaded && <LoadingPlaceholder width="100%" height="100%" {...otherProps} />}
+      <StyledImage src={src} {...otherProps} onLoad={() => setImageLoaded(true)} visible={imageLoaded} />
     </>
   )
 }
 
-const StyledImage = styled(BootstrapImage)`
-  visibility: ${props => (props.visible ? 'visible' : 'hidden')};
+const StyledImage = styled.img`
+  display: ${props => (props.visible ? 'initial' : 'none')};
+  height: 100%;
 `
 
 export default Image
