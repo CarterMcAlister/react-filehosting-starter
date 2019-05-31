@@ -9,7 +9,6 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import UploadsList from '../components/UploadsList'
 
 function Profile({ isAuthenticated }) {
-  const [isLoading, setIsLoading] = useState(true)
   const [list, setList] = useState(placeholderList)
   const [profileImage, setProfileImage] = useState(null)
   const [username, setUserName] = useState(<LoadingPlaceholder width="400px" baseColor="#ddd" />)
@@ -47,8 +46,6 @@ function Profile({ isAuthenticated }) {
 
     getUserInfo()
     getList()
-
-    setIsLoading(false)
   }, [])
 
   const renderFileList = list => {
@@ -71,13 +68,7 @@ function Profile({ isAuthenticated }) {
         <Card.Body>
           <Card.Title>{username}</Card.Title>
           <Card.Subtitle>{email}</Card.Subtitle>
-          <Button
-            variant="link"
-            css={css`
-              padding-left: 0;
-            `}>
-            Change Password
-          </Button>
+          <NavLink to="/profile/changepassword">Change Password</NavLink>
         </Card.Body>
       </UserInfoCard>
       <section>

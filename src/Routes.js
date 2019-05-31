@@ -7,6 +7,7 @@ import Signup from './pages/Signup'
 import Upload from './pages/Upload'
 import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
+import ChangePassword from './pages/profile/ChangePassword'
 import AppliedRoute from './components/AppliedRoute'
 import AuthenticatedRoute from './components/AuthenticatedRoute'
 import UnauthenticatedRoute from './components/UnauthenticatedRoute'
@@ -17,6 +18,7 @@ export default ({ childProps }) => (
     <UnauthenticatedRoute path="/login" exact component={Login} props={childProps} />
     <UnauthenticatedRoute path="/signup" exact component={Signup} props={childProps} />
     <AuthenticatedRoute path="/profile" exact component={Profile} props={childProps} />
+    <AuthenticatedRoute path="/profile/changepassword" exact component={ChangePassword} props={childProps} />
     <AuthenticatedRoute path="/uploads/new" exact component={Upload} props={childProps} />
     <AuthenticatedRoute path="/uploads/:id" exact component={Item} props={childProps} />
     {/* Finally, catch all unmatched routes */}
