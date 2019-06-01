@@ -45,7 +45,7 @@ export default class Login extends Component {
         <form onSubmit={this.handleSubmit}>
           <Form.Group controlId="email" bsSize="large">
             <Form.Label>Email</Form.Label>
-            <Form.Control autoFocus type="email" value={this.state.email} onChange={this.handleChange} />
+            <Form.Control autoFocus value={this.state.email} onChange={this.handleChange} />
           </Form.Group>
           <Form.Group controlId="password" bsSize="large">
             <Form.Label>Password</Form.Label>

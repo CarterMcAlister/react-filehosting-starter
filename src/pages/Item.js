@@ -4,6 +4,7 @@ import { Container, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
 import styled from '@xstyled/styled-components'
 import Slider from 'react-slick'
 import Lightbox from 'react-image-lightbox'
+import { Link, NavLink } from 'react-router-dom'
 import 'react-image-lightbox/style.css' // This only needs to be imported once in your app
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import Image from '../components/Image'
@@ -65,6 +66,9 @@ const Item = ({ match }) => {
             <Container fluid>
               <h1>{item.name}</h1>
               <h2>{item.category}</h2>
+              <Link to={`/profile/${item.userId}`} className="btn btn-info btn-lg">
+                Uploader
+              </Link>
             </Container>
           </SubHeader>
         </Header>

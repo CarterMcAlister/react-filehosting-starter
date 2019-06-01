@@ -35,6 +35,11 @@ Amplify.configure({
         name: 'upload',
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
+      },
+      {
+        name: 'get-user',
+        endpoint: config.apiGateway.URL,
+        region: config.apiGateway.REGION
       }
     ]
   }

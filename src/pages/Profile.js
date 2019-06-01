@@ -4,48 +4,50 @@ import { Link, NavLink } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import styled, { css } from '@xstyled/styled-components'
+import { getCognitoIdentityId } from '../libs/awsLib'
 import Image from '../components/Image'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import UploadsList from '../components/UploadsList'
 
-function Profile({ isAuthenticated }) {
+function Profile({ isAuthenticated, match }) {
   const [list, setList] = useState(placeholderList)
   const [profileImage, setProfileImage] = useState(null)
   const [username, setUserName] = useState(<LoadingPlaceholder width="400px" baseColor="#ddd" />)
   const [email, setEmail] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
+  const [joinDate, setJoinDate] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser().then(user => console.log(user))
+    if (!isAuthenticated) {
+      return
+    }
+    getUserInfo()
+    getList()
+
+    async function getUserInfo() {
+      try {
+        const profileId = (match.params || {}).id ? match.params.id : await getCognitoIdentityId()
+
+        const { userName, joinedOn } = await API.get('get-user', `/user/${profileId}`)
+
+        setProfileImage(`https://avatar.tobi.sh/${userName}.svg?text=${userName[0]}`)
+        setUserName(userName)
+        setJoinDate(new Date(joinedOn))
+        // setEmail(userData.userName)
+      } catch (e) {
+        alert(e)
+      }
+    }
+
     async function getList() {
       try {
-        const list = await API.get('list', '/list')
+        const profileId = (match.params || {}).id ? match.params.id : await getCognitoIdentityId()
+
+        const list = await API.get('list', `/list/${profileId}`)
         setList(list)
       } catch (e) {
         alert(e)
       }
     }
-
-    async function getUserInfo() {
-      try {
-        const {
-          username,
-          attributes: { email }
-        } = await Auth.currentAuthenticatedUser()
-
-        setProfileImage(`https://avatar.tobi.sh/${username}.svg?text=${username[0]}`)
-        setUserName(username)
-        setEmail(email)
-      } catch (e) {
-        alert(e)
-      }
-    }
-
-    if (!isAuthenticated) {
-      return
-    }
-
-    getUserInfo()
-    getList()
   }, [])
 
   const renderFileList = list => {
