@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const MainNav = ({ isAuthenticated, handleLogout }) => (
+const MainNav = ({ isAuthenticated, handleLogout, userName }) => (
   <Navbar collapseOnSelect expand="lg">
     <LinkContainer to="/">
       <Navbar.Brand>React Filehosting Starter</Navbar.Brand>
@@ -13,12 +13,12 @@ const MainNav = ({ isAuthenticated, handleLogout }) => (
         {isAuthenticated ? (
           <>
             <Nav.Item>
-              <LinkContainer to="/uploads/new">
+              <LinkContainer to="/new">
                 <Nav.Link>Upload</Nav.Link>
               </LinkContainer>
             </Nav.Item>
             <Nav.Item>
-              <LinkContainer to="/profile">
+              <LinkContainer to={`/${userName}`}>
                 <Nav.Link>Profile</Nav.Link>
               </LinkContainer>
             </Nav.Item>

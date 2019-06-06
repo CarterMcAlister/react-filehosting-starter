@@ -25,7 +25,7 @@ const Item = ({ match }) => {
     async function getItem() {
       try {
         // Get item data
-        const itemData = await API.get('file', `/file/${match.params.id}`)
+        const itemData = await API.get('file', `/item/${match.params.userName}/${match.params.id}`)
         setItem(itemData)
         // Get image URLs
         const imageRefs = await getFiles(itemData.imageReference)

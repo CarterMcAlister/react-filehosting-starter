@@ -8,7 +8,7 @@ const UploadsList = ({ list }) => {
   return (
     <ListGroup>
       {list.map(item => (
-        <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
+        <NavLink key={item.uploadId} to={`/${item.userName}/${item.uploadId}`}>
           <StyledListGroupItem action>
             <span>{item.name}</span>
             <span>{item.createdAt ? new Date(item.createdAt).toLocaleString() : ''}</span>

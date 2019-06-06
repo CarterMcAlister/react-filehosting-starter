@@ -16,6 +16,8 @@ function Profile({ isAuthenticated, match }) {
   const [email, setEmail] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
   const [joinDate, setJoinDate] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
 
+  const userName = match.params.userName
+
   useEffect(() => {
     if (!isAuthenticated) {
       return
@@ -25,9 +27,7 @@ function Profile({ isAuthenticated, match }) {
 
     async function getUserInfo() {
       try {
-        const profileId = (match.params || {}).id ? match.params.id : await getCognitoIdentityId()
-
-        const { userName, joinedOn } = await API.get('get-user', `/user/${profileId}`)
+        const { joinedOn } = await API.get('get-user', `/user/${userName}`)
 
         setProfileImage(`https://avatar.tobi.sh/${userName}.svg?text=${userName[0]}`)
         setUserName(userName)
@@ -40,9 +40,7 @@ function Profile({ isAuthenticated, match }) {
 
     async function getList() {
       try {
-        const profileId = (match.params || {}).id ? match.params.id : await getCognitoIdentityId()
-
-        const list = await API.get('list', `/list/${profileId}`)
+        const list = await API.get('list', `/list/${userName}`)
         setList(list)
       } catch (e) {
         alert(e)
@@ -70,7 +68,7 @@ function Profile({ isAuthenticated, match }) {
         <Card.Body>
           <Card.Title>{username}</Card.Title>
           <Card.Subtitle>{email}</Card.Subtitle>
-          <NavLink to="/profile/changepassword">Change Password</NavLink>
+          {/* <NavLink to="/profile/changepassword">Change Password</NavLink> */}
         </Card.Body>
       </UserInfoCard>
       <section>
