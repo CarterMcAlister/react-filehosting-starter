@@ -40,6 +40,11 @@ Amplify.configure({
         name: 'get-user',
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
+      },
+      {
+        name: 'get-most-recent',
+        endpoint: config.apiGateway.URL,
+        region: config.apiGateway.REGION
       }
     ]
   }

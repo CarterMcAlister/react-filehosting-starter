@@ -12,7 +12,7 @@ function Home({ isAuthenticated }) {
   useEffect(() => {
     async function getList() {
       try {
-        const list = await API.get('list', '/list')
+        const list = await API.get('get-most-recent', `/recent`)
         // list.shift()
         console.log(list)
         setList(list)

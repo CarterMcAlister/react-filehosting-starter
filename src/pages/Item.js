@@ -66,8 +66,9 @@ const Item = ({ match }) => {
             <Container fluid>
               <h1>{item.name}</h1>
               <h2>{item.category}</h2>
-              <Link to={`/profile/${item.userId}`} className="btn btn-info btn-lg">
-                Uploader
+              Uploaded by:
+              <Link to={`/${item.userName}`} className="btn btn-text">
+                {item.userName}
               </Link>
             </Container>
           </SubHeader>

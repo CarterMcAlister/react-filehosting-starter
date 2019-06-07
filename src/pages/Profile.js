@@ -13,7 +13,6 @@ function Profile({ isAuthenticated, match }) {
   const [list, setList] = useState(placeholderList)
   const [profileImage, setProfileImage] = useState(null)
   const [username, setUserName] = useState(<LoadingPlaceholder width="400px" baseColor="#ddd" />)
-  const [email, setEmail] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
   const [joinDate, setJoinDate] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
 
   const userName = match.params.userName
@@ -67,7 +66,7 @@ function Profile({ isAuthenticated, match }) {
         <Image src={profileImage} height="200px" width="200px" baseColor="#ddd" />
         <Card.Body>
           <Card.Title>{username}</Card.Title>
-          <Card.Subtitle>{email}</Card.Subtitle>
+          {/* <span>{new Date(joinDate).toLocaleDateString() && joinDate}</span> */}
           {/* <NavLink to="/profile/changepassword">Change Password</NavLink> */}
         </Card.Body>
       </UserInfoCard>

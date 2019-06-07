@@ -50,7 +50,8 @@ function Upload({ history }) {
         category,
         description
       })
-      history.push('/profile')
+      // TODO: change to send to profile page
+      history.push('/')
     } catch (e) {
       alert(e)
       setIsLoading(false)
