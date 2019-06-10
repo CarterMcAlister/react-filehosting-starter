@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { API, Auth } from 'aws-amplify'
-import { Link, NavLink } from 'react-router-dom'
-import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import styled, { css } from '@xstyled/styled-components'
-import { getCognitoIdentityId } from '../libs/awsLib'
+import { API } from 'aws-amplify'
+import { Card } from 'react-bootstrap'
+import styled from '@xstyled/styled-components'
 import Image from '../components/Image'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import UploadsList from '../components/UploadsList'
@@ -47,17 +44,6 @@ function Profile({ isAuthenticated, match }) {
     }
   }, [])
 
-  const renderFileList = list => {
-    return list.map(item => (
-      <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
-        <UploadedListItem>
-          <span>{item.name}</span>
-          <span>{new Date(item.createdAt).toLocaleDateString() && item.createdAt}</span>
-        </UploadedListItem>
-      </NavLink>
-    ))
-  }
-
   return (
     <div>
       {/* ? Classname not getting set from styled-components properly - need to fix */}
@@ -84,11 +70,6 @@ const placeholderList = [
   { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> },
   { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> }
 ]
-
-const UploadedListItem = styled(ListGroupItem)`
-  display: flex;
-  justify-content: space-between;
-`
 
 const UserInfoCard = styled(Card)`
   display: flex;
