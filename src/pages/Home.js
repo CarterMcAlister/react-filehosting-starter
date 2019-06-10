@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { Navbar, ListGroup, ListGroupItem } from 'react-bootstrap'
+import styled from 'styled-components'
 import UploadsList from '../components/UploadsList'
-import './Home.css'
 
 function Home({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -56,7 +56,12 @@ function Home({ isAuthenticated }) {
     )
   }
 
-  return <div className="Home">{isAuthenticated ? renderlist() : renderLander()}</div>
+  return <Homepage>{isAuthenticated ? renderlist() : renderLander()}</Homepage>
 }
+
+const Homepage = styled.div`
+  padding-top: 10vh;
+  text-align: center;
+`
 
 export default Home
