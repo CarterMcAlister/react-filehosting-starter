@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { API, Auth } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
 import { Link, NavLink } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
@@ -7,7 +7,7 @@ import styled, { css } from '@xstyled/styled-components'
 import { getCognitoIdentityId } from '../libs/awsLib'
 import Image from '../components/Image'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
-import UploadsList from '../components/UploadsList'
+import UploadList from '../components/UploadList'
 
 function Profile({ isAuthenticated, match }) {
   const [list, setList] = useState(placeholderList)
@@ -15,7 +15,7 @@ function Profile({ isAuthenticated, match }) {
   const [username, setUserName] = useState(<LoadingPlaceholder width="400px" baseColor="#ddd" />)
   const [joinDate, setJoinDate] = useState(<LoadingPlaceholder width="300px" baseColor="#ddd" />)
 
-  const userName = match.params.userName
+  const { userName } = match.params
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -41,29 +41,28 @@ function Profile({ isAuthenticated, match }) {
       try {
         const list = await API.get('list', `/list/${userName}`)
         setList(list)
+
+        const listWithImgRefs = await Promise.all(
+          list.map(async listItem => {
+            return {
+              featuredImage: await Storage.vault.get(listItem.featuredImageReference),
+              ...listItem
+            }
+          })
+        )
+        setList(listWithImgRefs)
       } catch (e) {
         alert(e)
       }
     }
   }, [])
 
-  const renderFileList = list => {
-    return list.map(item => (
-      <NavLink key={item.uploadId} to={`/uploads/${item.uploadId}`}>
-        <UploadedListItem>
-          <span>{item.name}</span>
-          <span>{new Date(item.createdAt).toLocaleDateString() && item.createdAt}</span>
-        </UploadedListItem>
-      </NavLink>
-    ))
-  }
-
   return (
     <div>
       {/* ? Classname not getting set from styled-components properly - need to fix */}
-      <UserInfoCard className="card">
+      <UserInfoCard>
         {/* User Info */}
-        <Image src={profileImage} height="200px" width="200px" baseColor="#ddd" />
+        <StyledImage src={profileImage} height="200px" width="200px" baseColor="#ddd" />
         <Card.Body>
           <Card.Title>{username}</Card.Title>
           {/* <span>{new Date(joinDate).toLocaleDateString() && joinDate}</span> */}
@@ -73,27 +72,31 @@ function Profile({ isAuthenticated, match }) {
       <section>
         {/* Uploads */}
         <h1>My Uploads</h1>
-        <UploadsList list={list} />
+        <UploadList list={list} />
       </section>
     </div>
   )
 }
 
 const placeholderList = [
-  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> },
-  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> },
-  { name: <LoadingPlaceholder width="300px" baseColor="#ddd" /> }
+  { name: <LoadingPlaceholder width="160px" /> },
+  { name: <LoadingPlaceholder width="160px" /> },
+  { name: <LoadingPlaceholder width="160px" /> },
+  { name: <LoadingPlaceholder width="160px" /> },
+  { name: <LoadingPlaceholder width="160px" /> }
 ]
 
-const UploadedListItem = styled(ListGroupItem)`
-  display: flex;
-  justify-content: space-between;
+const StyledImage = styled(Image)`
+  border-radius: 10%;
 `
 
 const UserInfoCard = styled(Card)`
   display: flex;
   flex-direction: row;
   margin: 20px 0;
+
+  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05), 0 15px 40px rgba(166, 173, 201, 0.2);
+  border-radius: 25px;
 `
 
 export default Profile

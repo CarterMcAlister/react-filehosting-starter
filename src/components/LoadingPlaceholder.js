@@ -9,7 +9,8 @@ const LoadingPlaceholder = ({
   width = '100%',
   height = 'auto',
   circle = false,
-  style = {}
+  style = {},
+  ...otherProps
 }) => {
   const PlaceholderItem = styled.span`
     ${placeholderStyles}
@@ -24,7 +25,7 @@ const LoadingPlaceholder = ({
   const PlaceholderItems = []
   for (let i = 0; i < count; i++) {
     PlaceholderItems.push(
-      <PlaceholderItem key={i} style={style}>
+      <PlaceholderItem key={i} style={style} {...otherProps}>
         &zwnj;
       </PlaceholderItem>
     )

@@ -28,8 +28,10 @@ const Item = ({ match }) => {
         const itemData = await API.get('file', `/item/${match.params.userName}/${match.params.id}`)
         setItem(itemData)
         // Get image URLs
+        const featuredImgRef = await Storage.vault.get(itemData.featuredImageReference)
+
+        setFeaturedImg(featuredImgRef)
         const imageRefs = await getFiles(itemData.imageReference)
-        setFeaturedImg(imageRefs[0].link)
         console.log(imageRefs)
         setImages(imageRefs.map(image => image.link))
       } catch (e) {
@@ -76,15 +78,16 @@ const Item = ({ match }) => {
         <Container fluid>
           <section>
             <Slider slidesToShow={images.length > 4 ? 4 : images.length} slidesToScroll={2} lazyLoad variableWidth>
-              {images.map((image, index) => (
-                <SliderImgWrapper
-                  onClick={() => {
-                    setPhotoIndex(index)
-                    setIsOpen(true)
-                  }}>
-                  <Image src={image} />
-                </SliderImgWrapper>
-              ))}
+              {images &&
+                images.map((image, index) => (
+                  <SliderImgWrapper
+                    onClick={() => {
+                      setPhotoIndex(index)
+                      setIsOpen(true)
+                    }}>
+                    <Image src={image} />
+                  </SliderImgWrapper>
+                ))}
             </Slider>
 
             {isOpen && (

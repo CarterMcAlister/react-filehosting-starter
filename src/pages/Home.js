@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
-import { Link, NavLink } from 'react-router-dom'
-import { Navbar, ListGroup, ListGroupItem } from 'react-bootstrap'
-import UploadsList from '../components/UploadsList'
+import { Link } from 'react-router-dom'
+import UploadList from '../components/UploadList'
 import './Home.css'
 
 function Home({ isAuthenticated }) {
@@ -34,7 +33,7 @@ function Home({ isAuthenticated }) {
     return (
       <div className="list">
         <h1>Recent Uploads</h1>
-        {!isLoading && <UploadsList list={list} />}
+        {!isLoading && <UploadList list={list} />}
       </div>
     )
   }

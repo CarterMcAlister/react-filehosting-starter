@@ -15,6 +15,7 @@ function Upload({ history }) {
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [images, setImages] = useState([])
+  const [featuredImage, setFeaturedImage] = useState(null)
   const [files, setFiles] = useState([])
   const [validated, setValidated] = useState(false)
 
@@ -36,14 +37,18 @@ function Upload({ history }) {
     setIsLoading(true)
 
     try {
-      // Upload attached files
-      const fileReference = await Promise.all(files.map(async file => s3Upload(file)))
+      // Upload featured image
+      const featuredImageReference = await s3Upload(featuredImage)
 
       // Upload attached images
       const imageReference = await Promise.all(images.map(async image => s3Upload(image)))
 
+      // Upload attached files
+      const fileReference = await Promise.all(files.map(async file => s3Upload(file)))
+
       // Add db entry for item
       await upload({
+        featuredImageReference,
         fileReference,
         imageReference,
         name,
@@ -81,6 +86,19 @@ function Upload({ history }) {
           />
           <Form.Control.Feedback type="invalid">Please provide a valid description.</Form.Control.Feedback>
         </Form.Group>
+        <Form.Group controlId="FeaturedImage">
+          <Form.Label>Featured Image</Form.Label>
+          {featuredImage && <img src={URL.createObjectURL(featuredImage)} alt="" />}
+          <FileSelector
+            handleSelection={selectedImg => {
+              console.log(selectedImg)
+              setFeaturedImage(selectedImg[0])
+            }}
+            requiredText="Please choose a featured image."
+            required
+          />
+          <Form.Control.Feedback type="invalid">Please choose at least one image.</Form.Control.Feedback>
+        </Form.Group>
         <Form.Group controlId="Image">
           <Form.Label>Image(s)</Form.Label>
           <SelectedImages
@@ -94,7 +112,6 @@ function Upload({ history }) {
               setImages(prevImages => [...prevImages, ...selectedImages])
             }}
             requiredText="Please choose at least one image."
-            required
           />
           <Form.Control.Feedback type="invalid">Please choose at least one image.</Form.Control.Feedback>
         </Form.Group>
