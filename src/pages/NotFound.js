@@ -1,8 +1,13 @@
 import React from 'react'
-import './NotFound.css'
+import styled from 'styled-components'
 
 export default () => (
-  <div className="NotFound">
+  <NotFoundPage>
     <h3>Sorry, page not found!</h3>
-  </div>
+  </NotFoundPage>
 )
+
+const NotFoundPage = styled.div`
+  padding-top: 100px;
+  text-align: center;
+`

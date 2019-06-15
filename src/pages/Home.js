@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { API } from 'aws-amplify'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 import UploadList from '../components/UploadList'
-import './Home.css'
 
 function Home({ isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -31,7 +31,7 @@ function Home({ isAuthenticated }) {
 
   const renderlist = () => {
     return (
-      <div className="list">
+      <div>
         <h1>Recent Uploads</h1>
         {!isLoading && <UploadList list={list} />}
       </div>
@@ -40,7 +40,7 @@ function Home({ isAuthenticated }) {
 
   const renderLander = () => {
     return (
-      <div className="lander">
+      <HomepageLander>
         <h1>Filehosting Starter</h1>
         <p>A Starter for creating a file hosting site using React and Serverless Node.js</p>
         <div>
@@ -51,11 +51,16 @@ function Home({ isAuthenticated }) {
             Signup
           </Link>
         </div>
-      </div>
+      </HomepageLander>
     )
   }
 
-  return <div className="Home">{isAuthenticated ? renderlist() : renderLander()}</div>
+  return <>{isAuthenticated ? renderlist() : renderLander()}</>
 }
+
+const HomepageLander = styled.div`
+  padding-top: 10vh;
+  text-align: center;
+`
 
 export default Home

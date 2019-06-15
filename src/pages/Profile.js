@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { API, Storage } from 'aws-amplify'
-import { Link, NavLink } from 'react-router-dom'
-import { ListGroup, ListGroupItem, Card, Button } from 'react-bootstrap'
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import styled, { css } from '@xstyled/styled-components'
-import { getCognitoIdentityId } from '../libs/awsLib'
+import styled from '@xstyled/styled-components'
+import { Card } from 'react-bootstrap'
+
 import Image from '../components/Image'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import UploadList from '../components/UploadList'
