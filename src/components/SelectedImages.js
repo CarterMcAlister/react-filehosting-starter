@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Button } from 'react-bootstrap'
 import styled from '@xstyled/styled-components'
 import PropTypes from 'prop-types'
 import ImageModal from './ImageModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function SelectedImages({ images, removeImage }) {
   const [showImgModal, setShowImgModal] = useState(false)
@@ -20,20 +20,26 @@ function SelectedImages({ images, removeImage }) {
     setShowImgModal(false)
   }
 
-  // TODO: make responsive
+  const convertBytesToMb = bytes => {
+    if(isNaN(bytes)) {
+      return 0
+    }
+
+    let numInMb = bytes / Math.pow(1024, 2)
+    numInMb = Math.round(numInMb * 10) / 10
+    return numInMb
+  }
+
+  // TODO: finish styling
   return (
     <Container>
       {images.map(image => (
-        <ImageItem key={image.name + image.lastModified}>
+        <ImageItem key={image.name + image.lastModified} >
           <ImageWrapper>
-            <ImageOverlay>
+            <ImageOverlay onClick={() => displayImgModal(URL.createObjectURL(image), image.name)}>
               <ImageName>{image.name}</ImageName>
-              <OverlayBtnWrapper>
-                <Button onClick={() => displayImgModal(URL.createObjectURL(image), image.name)}>View Image</Button>
-                <Button variant="danger" onClick={() => removeImage(image)}>
-                  Remove
-                </Button>
-              </OverlayBtnWrapper>
+              <div style={{color: 'white'}}>{convertBytesToMb(image.size)} MB</div>
+                <RemoveBtn icon="times-circle" onClick={() => removeImage(image)} />
             </ImageOverlay>
             <Image src={URL.createObjectURL(image)} alt={image.name} />
           </ImageWrapper>
@@ -44,16 +50,27 @@ function SelectedImages({ images, removeImage }) {
   )
 }
 
+const RemoveBtn = styled(FontAwesomeIcon)`
+  border-radius: 50%;
+  color: white;
+  border: none;
+  bottom: 0;
+  right: 0;
+  margin: 5px;
+  z-index: 3;
+  position: absolute;
+`
+
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 10px;
 `
 const ImageItem = styled.div`
-  width: 33%;
   position: relative;
-  padding-bottom: 10px;
-
+  cursor: pointer;
+  border-radius: 10%;
+  padding: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,6 +82,7 @@ const ImageOverlay = styled.div`
   background: rgba(0, 0, 0, 0.4);
   display: none;
   flex-direction: column;
+  border-radius: 10%;
 `
 const ImageWrapper = styled.div`
   position: relative;
@@ -76,20 +94,22 @@ const ImageWrapper = styled.div`
 const ImageName = styled.div`
   padding-left: 5px;
   color: #fff;
-  font-size: 10px;
-`
-const OverlayBtnWrapper = styled.div`
-  display: flex;
-  margin: auto;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 3px 10px 10px 10px;
 
-  .btn {
-    margin: 0px 5px;
+  &:hover {
+    white-space: normal;
+    overflow: visible;
   }
 `
 const Image = styled.img`
-  max-width: 100%;
-  min-height: 170px;
-  min-width: 170px;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10%;
 `
 
 SelectedImages.propTypes = {
