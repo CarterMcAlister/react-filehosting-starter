@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from '@xstyled/styled-components'
-import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
 const ImageModal = ({ image, alt, show, onHide }) => (
@@ -24,17 +23,5 @@ const Image = styled.img`
   max-width: 100%;
   height: auto;
 `
-
-ImageModal.propTypes = {
-  image: PropTypes.string,
-  alt: PropTypes.string,
-  show: PropTypes.bool.isRequired,
-  onHide: PropTypes.func.isRequired
-}
-
-ImageModal.defaultProps = {
-  image: '',
-  alt: ''
-}
 
 export default ImageModal

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from '@xstyled/styled-components'
-import PropTypes from 'prop-types'
-import ImageModal from './ImageModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import ImageModal from './ImageModal'
 
 function SelectedImages({ images, removeImage }) {
   const [showImgModal, setShowImgModal] = useState(false)
@@ -21,7 +21,7 @@ function SelectedImages({ images, removeImage }) {
   }
 
   const convertBytesToMb = bytes => {
-    if(isNaN(bytes)) {
+    if (Number.isNaN(bytes)) {
       return 0
     }
 
@@ -34,12 +34,12 @@ function SelectedImages({ images, removeImage }) {
   return (
     <Container>
       {images.map(image => (
-        <ImageItem key={image.name + image.lastModified} >
+        <ImageItem key={image.name + image.lastModified}>
           <ImageWrapper>
             <ImageOverlay onClick={() => displayImgModal(URL.createObjectURL(image), image.name)}>
               <ImageName>{image.name}</ImageName>
-              <div style={{color: 'white'}}>{convertBytesToMb(image.size)} MB</div>
-                <RemoveBtn icon="times-circle" onClick={() => removeImage(image)} />
+              <div style={{ color: 'white' }}>{convertBytesToMb(image.size)} MB</div>
+              <RemoveBtn icon="times-circle" onClick={() => removeImage(image)} />
             </ImageOverlay>
             <Image src={URL.createObjectURL(image)} alt={image.name} />
           </ImageWrapper>
@@ -111,10 +111,5 @@ const Image = styled.img`
   object-fit: cover;
   border-radius: 10%;
 `
-
-SelectedImages.propTypes = {
-  images: PropTypes.arrayOf(Object).isRequired,
-  removeImage: PropTypes.func.isRequired
-}
 
 export default SelectedImages

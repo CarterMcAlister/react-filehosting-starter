@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import styled from '@xstyled/styled-components'
 import { Form } from 'react-bootstrap'
-import PropTypes from 'prop-types'
 
 function FileSelector({ handleSelection, required, requiredText }) {
   const onDrop = useCallback(acceptedFiles => {
@@ -34,16 +33,5 @@ const DropZone = styled.div`
     border: 2.5px dashed gray;
   }
 `
-
-FileSelector.propTypes = {
-  handleSelection: PropTypes.func.isRequired,
-  required: PropTypes.bool,
-  requiredText: PropTypes.string
-}
-
-FileSelector.defaultProps = {
-  required: false,
-  requiredText: ''
-}
 
 export default FileSelector

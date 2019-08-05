@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from '@xstyled/styled-components'
 import Image from './Image'
@@ -55,9 +54,5 @@ const ItemInfo = styled.div`
   align-items: center;
   padding-left: 20px;
 `
-
-UploadListItem.propTypes = {
-  item: PropTypes.object.isRequired
-}
 
 export default UploadListItem

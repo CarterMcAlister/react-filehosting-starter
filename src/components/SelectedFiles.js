@@ -1,6 +1,5 @@
 import React from 'react'
 import { Table, Button } from 'react-bootstrap'
-import PropTypes from 'prop-types'
 import styled from '@xstyled/styled-components'
 
 function SelectedFiles({ files, removeFile }) {
@@ -30,10 +29,5 @@ const TableCell = styled.td`
   justify-content: flex-end;
   align-items: center;
 `
-
-SelectedFiles.propTypes = {
-  files: PropTypes.arrayOf(Object).isRequired,
-  removeFile: PropTypes.func.isRequired
-}
 
 export default SelectedFiles

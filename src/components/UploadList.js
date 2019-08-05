@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from '@xstyled/styled-components'
 import UploadListItem from './UploadListItem'
 
@@ -23,9 +22,5 @@ const Grid = styled.div`
     flex: 10 0 auto;
   }
 `
-
-UploadList.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.object).isRequired
-}
 
 export default UploadList

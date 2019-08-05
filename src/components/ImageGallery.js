@@ -4,7 +4,7 @@ import Lightbox from 'react-image-lightbox'
 import Slider from 'react-slick'
 import 'react-image-lightbox/style.css'
 
-import Image from '../components/Image'
+import Image from './Image'
 
 const ImageGallery = ({ images }) => {
   const [photoIndex, setPhotoIndex] = useState(0)

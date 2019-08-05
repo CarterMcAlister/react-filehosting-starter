@@ -11,6 +11,7 @@ module.exports = {
     'jsx-a11y/href-no-hash': ['off'],
     'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
     'no-use-before-define': 'off',
+    'react/prop-types': 0,
     'max-len': [
       'warn',
       {
